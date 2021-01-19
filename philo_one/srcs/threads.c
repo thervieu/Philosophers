@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:37:09 by user42            #+#    #+#             */
-/*   Updated: 2021/01/15 18:56:07 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/19 15:50:58 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,13 @@ void	*check_count(void *envi)
 	int		nb_eat;
 	t_env	*env;
 
-	nb_eat = 0;
+	nb_eat = -1;
 	env = (t_env*)envi;
-	while (nb_eat < env->nb_must_eat)
+	while (++nb_eat < env->nb_must_eat)
 	{
-		i = 0;
-		while (i < env->nb_philo)
-		{
+		i = -1;
+		while (++i < env->nb_philo)
 			pthread_mutex_lock(&env->philos[i].eat_mutex);
-			i++;
-		}
-		nb_eat++;
 	}
 	pthread_mutex_lock(&env->write_mutex);
 	printf("All philosophers have eaten\n");
@@ -87,7 +83,7 @@ int		init_threads(t_env *env)
 	pthread_t	t_id;
 	void		*philo;
 
-	i = 0;
+	i = -1;
 	if (env->nb_must_eat > 0)
 	{
 		if (pthread_create(&t_id, NULL, &check_count, (void*)env) != 0)
@@ -95,14 +91,13 @@ int		init_threads(t_env *env)
 		pthread_detach(t_id);
 	}
 	env->st = get_time();
-	while (i < env->nb_philo)
+	while (++i < env->nb_philo)
 	{
 		philo = (t_philo*)(&env->philos[i]);
 		if (pthread_create(&t_id, NULL, &routine, philo) != 0)
 			return (1);
 		pthread_detach(t_id);
 		usleep(70);
-		i++;
 	}
 	return (0);
 }

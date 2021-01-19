@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:37:09 by user42            #+#    #+#             */
-/*   Updated: 2021/01/15 18:48:34 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/19 15:51:54 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,13 @@ void	*check_count(void *envi)
 	int		nb_eat;
 	t_env	*env;
 
-	nb_eat = 0;
+	nb_eat = -1;
 	env = (t_env*)envi;
-	while (nb_eat < env->nb_must_eat)
+	while (++nb_eat < env->nb_must_eat)
 	{
-		i = 0;
-		while (i < env->nb_philo)
-		{
+		i = -1;
+		while (++i < env->nb_philo)
 			sem_wait(env->philos[i].eat_sem);
-			i++;
-		}
-		nb_eat++;
 	}
 	sem_wait(env->write_sem);
 	printf("All philosophers have eaten\n");

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:24:43 by user42            #+#    #+#             */
-/*   Updated: 2021/01/15 18:01:46 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/19 15:49:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ static t_philo			*init_philos(t_env *env)
 	int			nb;
 	t_philo		*phi;
 
-	nb = 0;
+	nb = -1;
 	if (!(phi = malloc(sizeof(t_philo) * env->nb_philo)))
 		return (NULL);
-	while (nb < env->nb_philo)
+	while (++nb < env->nb_philo)
 	{
 		phi[nb].id = nb;
 		phi[nb].nb_eat = 0;
@@ -31,7 +31,6 @@ static t_philo			*init_philos(t_env *env)
 		pthread_mutex_init(&(phi[nb].eat_mutex), NULL);
 		pthread_mutex_init(&(phi[nb].check), NULL);
 		phi[nb].env = env;
-		nb++;
 	}
 	return (phi);
 }
@@ -41,13 +40,12 @@ static pthread_mutex_t	*init_forks(t_env *env)
 	int				i;
 	pthread_mutex_t	*forks;
 
-	i = 0;
+	i = -1;
 	if (!(forks = malloc(sizeof(pthread_mutex_t) * env->nb_philo)))
 		return (NULL);
-	while (i < env->nb_philo)
+	while (++i < env->nb_philo)
 	{
 		pthread_mutex_init(&(forks[i]), NULL);
-		i++;
 	}
 	return (forks);
 }
