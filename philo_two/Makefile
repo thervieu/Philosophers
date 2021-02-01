@@ -6,7 +6,7 @@
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/14 18:30:23 by user42            #+#    #+#              #
-#    Updated: 2021/02/01 18:29:40 by user42           ###   ########.fr        #
+#    Updated: 2021/02/01 18:50:06 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = philo_two
 
 SRCS_DIR = srcs/
 
-SRCS =	philo_two.c	\
+SRCS =	philo_two.c		\
 		threads.c		\
 		actions.c		\
 		time_and_sem.c	\
@@ -25,8 +25,6 @@ INCS = incs/philo_two.h
 
 OBJS_DIR = objs/
 
-OBJS_DIR_SSH = objs/
-
 OBJ = $(SRCS:.c=.o)
 
 OBJS = $(addprefix $(OBJS_DIR), $(OBJ))
@@ -35,19 +33,10 @@ FLAGS = -Wall -Wextra -Werror
 
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.c $(INCS) 
 	@mkdir -p $(OBJS_DIR)
-	@echo "Compiling"
-	@clang $(FLAGS) -c $< -o $@
-
-$(NAME): $(OBJS)
-	@clang -lpthread $(FLAGS) -o $(NAME) $(OBJS)
-	@echo "Exec created !"
-
-$(OBJS_DIR_SSH)%.o : $(SRCS_DIR)%.c $(INCS) 
-	@mkdir -p $(OBJS_DIR)
-	@echo "Compiling"
+	@echo "Compiling vm"
 	@gcc $(FLAGS) -c $< -o $@
 
-ssh: $(OBJS)
+$(NAME): $(OBJS)
 	@gcc -lpthread $(FLAGS) -o $(NAME) $(OBJS)
 	@echo "Exec created !"
 
