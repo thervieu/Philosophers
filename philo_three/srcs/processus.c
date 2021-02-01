@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:37:09 by user42            #+#    #+#             */
-/*   Updated: 2021/01/19 15:52:30 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/01 16:27:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void		*check_count(void *envi)
 			sem_wait(env->philos[i].eat_sem);
 	}
 	sem_wait(env->write_sem);
-	printf("All philosophers have eaten\n");
 	sem_post(env->end);
 	return ((void*)0);
 }

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:37:09 by user42            #+#    #+#             */
-/*   Updated: 2021/01/19 15:50:58 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/01 16:27:28 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	*check_count(void *envi)
 			pthread_mutex_lock(&env->philos[i].eat_mutex);
 	}
 	pthread_mutex_lock(&env->write_mutex);
-	printf("All philosophers have eaten\n");
 	pthread_mutex_unlock(&env->end);
 	return ((void*)0);
 }

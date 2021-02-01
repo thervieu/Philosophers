@@ -6,7 +6,7 @@
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/14 18:30:23 by user42            #+#    #+#              #
-#    Updated: 2021/01/15 17:55:16 by user42           ###   ########.fr        #
+#    Updated: 2021/02/01 16:28:22 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,14 +16,16 @@ NAME = philo_three
 SRCS_DIR = srcs/
 
 SRCS =	philo_three.c	\
-		processus.c		\
+		threads.c		\
 		actions.c		\
-		time_and_sem.c	\
+		precise_time.c	\
 		utils.c
 
 INCS = incs/philo_three.h
 
 OBJS_DIR = objs/
+
+OBJS_DIR_SSH = objs/
 
 OBJ = $(SRCS:.c=.o)
 
@@ -38,6 +40,15 @@ $(OBJS_DIR)%.o : $(SRCS_DIR)%.c $(INCS)
 
 $(NAME): $(OBJS)
 	@clang -lpthread $(FLAGS) -o $(NAME) $(OBJS)
+	@echo "Exec created !"
+
+$(OBJS_DIR_SSH)%.o : $(SRCS_DIR)%.c $(INCS) 
+	@mkdir -p $(OBJS_DIR)
+	@echo "Compiling"
+	@gcc $(FLAGS) -c $< -o $@
+
+ssh: $(OBJS)
+	@gcc -lpthread $(FLAGS) -o $(NAME) $(OBJS)
 	@echo "Exec created !"
 
 all: $(NAME)
