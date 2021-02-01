@@ -6,7 +6,7 @@
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/14 18:30:23 by user42            #+#    #+#              #
-#    Updated: 2021/02/01 16:28:22 by user42           ###   ########.fr        #
+#    Updated: 2021/02/01 18:27:59 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,9 +16,9 @@ NAME = philo_three
 SRCS_DIR = srcs/
 
 SRCS =	philo_three.c	\
-		threads.c		\
+		processus.c		\
 		actions.c		\
-		precise_time.c	\
+		time_and_sem.c	\
 		utils.c
 
 INCS = incs/philo_three.h

@@ -6,7 +6,7 @@
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/14 18:30:23 by user42            #+#    #+#              #
-#    Updated: 2021/02/01 16:28:34 by user42           ###   ########.fr        #
+#    Updated: 2021/02/01 18:29:40 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRCS_DIR = srcs/
 SRCS =	philo_two.c	\
 		threads.c		\
 		actions.c		\
-		precise_time.c	\
+		time_and_sem.c	\
 		utils.c
 
 INCS = incs/philo_two.h

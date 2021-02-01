@@ -6,7 +6,7 @@
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/14 18:30:23 by user42            #+#    #+#              #
-#    Updated: 2021/02/01 16:19:26 by user42           ###   ########.fr        #
+#    Updated: 2021/02/01 18:44:47 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,21 +35,18 @@ FLAGS = -Wall -Wextra -Werror
 
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.c $(INCS) 
 	@mkdir -p $(OBJS_DIR)
-	@echo "Compiling"
+	@echo "Compiling vm"
 	@clang $(FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
 	@clang -lpthread $(FLAGS) -o $(NAME) $(OBJS)
-	@echo "Exec created !"
+	@echo "Exec created ! vm"
 
-$(OBJS_DIR_SSH)%.o : $(SRCS_DIR)%.c $(INCS) 
-	@mkdir -p $(OBJS_DIR)
-	@echo "Compiling"
-	@gcc $(FLAGS) -c $< -o $@
-
-ssh: $(OBJS)
+ssh:
+	@gcc $(FLAGS) $(OBJS) $(INCS)
+	@echo "Compiling ssh"
 	@gcc -lpthread $(FLAGS) -o $(NAME) $(OBJS)
-	@echo "Exec created !"
+	@echo "Exec created ! ssh"
 
 all: $(NAME)
 
