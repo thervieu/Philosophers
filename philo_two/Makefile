@@ -6,10 +6,9 @@
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/14 18:30:23 by user42            #+#    #+#              #
-#    Updated: 2021/02/01 18:50:06 by user42           ###   ########.fr        #
+#    Updated: 2021/02/01 18:55:45 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
 
 NAME = philo_two
 
@@ -33,11 +32,11 @@ FLAGS = -Wall -Wextra -Werror
 
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.c $(INCS) 
 	@mkdir -p $(OBJS_DIR)
-	@echo "Compiling vm"
-	@gcc $(FLAGS) -c $< -o $@
+	@echo "Compiling"
+	@clang $(FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
-	@gcc -lpthread $(FLAGS) -o $(NAME) $(OBJS)
+	@clang -lpthread $(FLAGS) -o $(NAME) $(OBJS)
 	@echo "Exec created !"
 
 all: $(NAME)

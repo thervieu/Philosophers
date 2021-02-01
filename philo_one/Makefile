@@ -6,10 +6,9 @@
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/14 18:30:23 by user42            #+#    #+#              #
-#    Updated: 2021/02/01 18:49:15 by user42           ###   ########.fr        #
+#    Updated: 2021/02/01 22:15:06 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
 
 NAME = philo_one
 
@@ -33,7 +32,7 @@ FLAGS = -Wall -Wextra -Werror
 
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.c $(INCS) 
 	@mkdir -p $(OBJS_DIR)
-	@echo "Compiling vm"
+	@echo "Compiling"
 	@gcc $(FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)

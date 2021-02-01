@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 10:25:53 by user42            #+#    #+#             */
-/*   Updated: 2021/02/01 18:20:29 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/01 22:02:44 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ typedef struct	s_philo
 {
 	int				id;
 	int				nb_eat;
+	pthread_t		death;
+	pthread_t		routine;
+	int				dead;
 	int				eating;
 	int				left_fork;
 	int				right_fork;
@@ -46,7 +49,9 @@ typedef struct	s_philo
 
 typedef struct	s_env
 {
+	pthread_t		count;
 	int				nb_philo;
+	int				*someone_dead;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
@@ -72,7 +77,7 @@ void			eat(t_philo *philo);
 ** threads.c
 */
 
-int				init_threads(t_env *env);
+int				init_threads(t_env *env, int i);
 
 /*
 ** precise_time.c
@@ -88,10 +93,8 @@ void			ft_usleep(size_t wait_time);
 
 int				ft_atoi_pos(char *str);
 
-long long		get_time(void);
-
-int				ft_atoi_pos(char *str);
-
 int				free_env(t_env *env);
+
+void			print_msg(t_philo *p,char *str);
 
 #endif
