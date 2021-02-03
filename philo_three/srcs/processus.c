@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:37:09 by user42            #+#    #+#             */
-/*   Updated: 2021/02/03 16:09:25 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/03 16:42:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,11 @@ int			death(t_philo *p)
 	{
 		p->dead = 1;
 		*(p->env->someone_dead) = 1;
-		if (p->nb_eat == p->env->nb_must_eat && p->id == p->env->nb_philo)
+		if (p->nb_eat == p->env->nb_must_eat && p->id + 1 == p->env->nb_philo)
+		{
 			sem_wait(p->env->write_sem);
-		sem_post(p->env->end);
+			sem_post(p->env->end);
+		}
 		return (1);
 	}
 	return (0);
