@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:37:16 by user42            #+#    #+#             */
-/*   Updated: 2021/02/01 22:14:18 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/02 21:34:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void		print_msg(t_philo *p, char *s)
 	else if (p->dead)
 		p->dead = 0;
 	pthread_mutex_lock(&(p->env->write_mutex));
-	printf("%lld %d is ", (get_time() - p->env->st) % 1000000, p->id + 1);
+	printf("%lld %d ", (get_time() - p->env->st) % 1000000, p->id + 1);
 	printf("%s\n", s);
 	pthread_mutex_unlock(&(p->env->write_mutex));
 	return ;

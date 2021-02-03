@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:24:43 by user42            #+#    #+#             */
-/*   Updated: 2021/02/01 22:02:55 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/03 14:08:02 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,9 @@ static t_philo			*init_philos(t_env *env)
 		phi[nb].id = nb;
 		phi[nb].dead = 0;
 		phi[nb].nb_eat = 0;
-		phi[nb].eating = 0;
 		phi[nb].left_fork = nb;
 		phi[nb].right_fork = (nb + 1) % env->nb_philo;
 		phi[nb].time_last_eat = get_time();
-		pthread_mutex_init(&(phi[nb].eat_mutex), NULL);
 		pthread_mutex_init(&(phi[nb].check), NULL);
 		phi[nb].env = env;
 	}
@@ -79,9 +77,18 @@ static t_env			*init_env(char **av)
 	return (env);
 }
 
-static int				print_clear(char *str, t_env *env)
+static int				print_clear(t_env *env, int i)
 {
-	printf("%s", str);
+	if (i == 0)
+	{
+		printf("Error: philo_two: format: ./philo_two [nb_philosophers] ");
+		printf("[time_to_die] [time_to_eat] [time_to_sleep] ");
+		printf("([nb_time_each_philo_must_eat])\n");
+	}
+	else if (i == 1)
+		printf("Error: philo_two: wrong argument\n");
+	else if (i == 2)
+		printf("Error: philo_two: fatal error\n");
 	if (env)
 		free_env(env);
 	return (1);
@@ -90,33 +97,28 @@ static int				print_clear(char *str, t_env *env)
 int						main(int ac, char **av)
 {
 	t_env	*env;
-	int		i = 0;
+	int		i;
+
+	i = 0;
 	env = NULL;
 	if (ac < 5 || ac > 6)
-	{
-		printf("Error: philo_one: format: ./philo_one [nb_philosophers] ");
-		printf("[time_to_die] [time_to_eat] [time_to_sleep] ");
-		return (print_clear("([nb_time_each_philo_must_eat])\n", env));
-	}
+		return (print_clear(env, 0));
 	if (ac == 5 && (ft_atoi_pos(av[1]) < 0 || ft_atoi_pos(av[2]) < 0
 		|| ft_atoi_pos(av[3]) < 0 || ft_atoi_pos(av[4]) < 0))
-		return (print_clear("Error: philo_one: wrong argument\n", env));
+		return (print_clear(env, 1));
 	if (ac == 6 && (ft_atoi_pos(av[1]) < 0 || ft_atoi_pos(av[2]) < 0
 		|| ft_atoi_pos(av[3]) < 0 || ft_atoi_pos(av[4]) < 0
 		|| ft_atoi_pos(av[5]) < 0))
-		return (print_clear("Error: philo_one: wrong argument\n", env));
-	if (!(env = init_env(av)))
-		return (print_clear("Error: philo_one: fatal error\n", env));
-	if (init_threads(env, 0) == ERROR)
-		return (print_clear("Error: philo_one: fatal error\n", env));
+		return (print_clear(env, 1));
+	if (!(env = init_env(av)) || init_threads(env, 0) == ERROR)
+		return (print_clear(env, 2));
 	pthread_mutex_lock(&env->end);
 	pthread_mutex_unlock(&env->end);
 	while (i < env->nb_philo)
-		pthread_join(env->philos[i++].death,  NULL);
+		pthread_join(env->philos[i++].death, NULL);
 	i = 0;
 	while (i < env->nb_philo)
-		pthread_join(env->philos[i++].routine,  NULL);
-	pthread_join(env->count,  NULL);
+		pthread_join(env->philos[i++].routine, NULL);
 	free_env(env);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 13:25:15 by user42            #+#    #+#             */
-/*   Updated: 2021/01/15 18:16:57 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/02 20:22:25 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char		*new_name(char const *base, char *buffer, int position)
 sem_t		*create_sem(char *name, int value)
 {
 	sem_unlink(name);
-	return (sem_open(name, O_CREAT | O_EXCL, 0644, value));
+	return (sem_open(name, O_CREAT, S_IRWXU, value));
 }
 
 long long	get_time(void)

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 10:25:53 by user42            #+#    #+#             */
-/*   Updated: 2021/02/01 22:02:44 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/03 14:07:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,15 @@ typedef struct	s_philo
 	pthread_t		death;
 	pthread_t		routine;
 	int				dead;
-	int				eating;
 	int				left_fork;
 	int				right_fork;
 	long long		time_last_eat;
-	pthread_mutex_t	eat_mutex;
 	pthread_mutex_t	check;
 	struct s_env	*env;
 }				t_philo;
 
 typedef struct	s_env
 {
-	pthread_t		count;
 	int				nb_philo;
 	int				*someone_dead;
 	int				time_to_die;
@@ -95,6 +92,6 @@ int				ft_atoi_pos(char *str);
 
 int				free_env(t_env *env);
 
-void			print_msg(t_philo *p,char *str);
+void			print_msg(t_philo *p, char *str);
 
 #endif

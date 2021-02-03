@@ -6,109 +6,93 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:37:09 by user42            #+#    #+#             */
-/*   Updated: 2021/02/01 16:27:20 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/03 16:09:25 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/philo_three.h"
-
-void		*check_count(void *envi)
-{
-	int		i;
-	int		nb_eat;
-	t_env	*env;
-
-	nb_eat = -1;
-	env = (t_env*)envi;
-	while (++nb_eat < env->nb_must_eat)
-	{
-		i = -1;
-		while (++i < env->nb_philo)
-			sem_wait(env->philos[i].eat_sem);
-	}
-	sem_wait(env->write_sem);
-	sem_post(env->end);
-	return ((void*)0);
-}
 
 void		*check_death(void *phi)
 {
 	t_philo *p;
 
 	p = (t_philo*)phi;
-	while (1)
+	while (1 && *(p->env->someone_dead) == 0)
 	{
+		if (p->dead == 1)
+			break ;
 		sem_wait(p->check);
-		if (!p->eating && get_time() > (p->time_last_eat + p->env->time_to_die))
+		if (get_time() > (p->time_last_eat + p->env->time_to_die))
 		{
+			p->dead = 1;
+			*(p->env->someone_dead) = 1;
+			print_msg(p, "died");
 			sem_wait(p->env->write_sem);
-			printf("%lld %d died\n", (get_time() - p->env->st)
-				% 1000000, p->id + 1);
 			sem_post(p->check);
 			sem_post(p->env->end);
-			return ((void*)0);
+			break ;
 		}
 		sem_post(p->check);
 		ft_usleep(1000);
 	}
+	return (NULL);
 }
 
-void		*routine(void *phi)
+int			death(t_philo *p)
 {
-	pthread_t	t_id;
+	if (*(p->env->someone_dead) || p->nb_eat == p->env->nb_must_eat)
+	{
+		p->dead = 1;
+		*(p->env->someone_dead) = 1;
+		if (p->nb_eat == p->env->nb_must_eat && p->id == p->env->nb_philo)
+			sem_wait(p->env->write_sem);
+		sem_post(p->env->end);
+		return (1);
+	}
+	return (0);
+}
+
+void		routine(t_philo *phi)
+{
 	t_philo		*p;
 
 	p = (t_philo*)phi;
 	p->time_last_eat = get_time();
-	if (pthread_create(&t_id, NULL, &check_death, phi) != 0)
-		return (NULL);
-	pthread_detach(t_id);
-	while (1)
+	if (pthread_create(&(p->death), NULL, &check_death, phi) != 0)
+		return ;
+	while (1 && *(p->env->someone_dead) == 0)
 	{
-		take_forks(p);
+		if (p->dead)
+			break ;
 		eat(p);
-		give_forks(p);
-		sem_wait(p->env->write_sem);
-		printf("%lld %d is thinking\n", (get_time() - p->env->st)
-			% 1000000, p->id + 1);
-		sem_post(p->env->write_sem);
+		if (death(p) == 1)
+			break ;
+		print_msg(p, "is sleeping");
+		ft_usleep(p->env->time_to_sleep * 1000);
+		if (*(p->env->someone_dead))
+			break ;
+		print_msg(p, "is thinking");
+		if (*(p->env->someone_dead))
+			break ;
 	}
-	return (NULL);
-}
-
-static int	init_nb_eat_count(t_env *env)
-{
-	pthread_t	t_id;
-
-	if (env->nb_must_eat > 0)
-	{
-		if (pthread_create(&t_id, NULL, &check_count, (void*)env) != 0)
-			return (ERROR);
-		pthread_detach(t_id);
-	}
-	return (SUCCESS);
+	free_env(p->env);
+	exit(1);
+	return ;
 }
 
 int			init_processus(t_env *env)
 {
 	int			i;
-	void		*philo;
 
 	i = -1;
-	if (init_nb_eat_count(env) == ERROR)
-		return (ERROR);
 	env->st = get_time();
 	while (++i < env->nb_philo)
 	{
-		philo = (void*)(&env->philos[i]);
 		env->philos[i].pid = fork();
 		if (env->philos[i].pid < 0)
 			return (ERROR);
 		else if (env->philos[i].pid == 0)
-		{
-			routine(&env->philos[i]);
-			exit(0);
-		}
+			routine(&(env->philos[i]));
 		usleep(70);
 	}
 	return (SUCCESS);

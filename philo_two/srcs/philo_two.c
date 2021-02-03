@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:24:43 by user42            #+#    #+#             */
-/*   Updated: 2021/01/15 18:06:00 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/03 14:34:03 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,10 @@ static t_philo			*init_philos(t_env *env)
 	{
 		phi[nb].id = nb;
 		phi[nb].nb_eat = 0;
-		phi[nb].eating = 0;
+		phi[nb].dead = 0;
 		phi[nb].left_fork = nb;
 		phi[nb].right_fork = (nb + 1) % env->nb_philo;
 		phi[nb].time_last_eat = get_time();
-		new_name(EAT_SEM, (char*)str, nb);
-		if ((phi[nb].eat_sem = create_sem(EAT_SEM, 0)) < 0)
-			return (NULL);
 		new_name(CHECK, (char*)str, nb);
 		if ((phi[nb].check = create_sem(CHECK, 1)) < 0)
 			return (NULL);
@@ -56,6 +53,9 @@ static t_env			*init_env(char **av)
 	if (!(env = (t_env*)malloc(sizeof(t_env))))
 		return (NULL);
 	memset(env, 0, sizeof(t_env));
+	if (!(env->someone_dead = malloc(sizeof(int))))
+		return (NULL);
+	*(env->someone_dead) = 0;
 	env->nb_philo = ft_atoi_pos(av[1]);
 	env->time_to_die = ft_atoi_pos(av[2]);
 	env->time_to_eat = ft_atoi_pos(av[3]);
@@ -66,44 +66,52 @@ static t_env			*init_env(char **av)
 		return (NULL);
 	if (init_sem(&env) == ERROR)
 		return (NULL);
-	if (init_sem(&env) == ERROR)
-		return (NULL);
 	if (!(env->philos = init_philos(env)))
 		return (NULL);
 	return (env);
 }
 
-static int				print_clear(char *str, t_env *env)
+static int				print_clear(t_env *env, int i)
 {
-	printf("%s", str);
+	if (i == 0)
+	{
+		printf("Error: philo_two: format: ./philo_two [nb_philosophers] ");
+		printf("[time_to_die] [time_to_eat] [time_to_sleep] ");
+		printf("([nb_time_each_philo_must_eat])\n");
+	}
+	else if (i == 1)
+		printf("Error: philo_two: wrong argument\n");
+	else if (i == 2)
+		printf("Error: philo_two: fatal error\n");
 	if (env)
-		free_env(env);
+		free_env(env, 0);
 	return (1);
 }
 
 int						main(int ac, char **av)
 {
 	t_env	*env;
+	int		i;
 
+	i = 0;
 	env = NULL;
 	if (ac < 5 || ac > 6)
-	{
-		printf("Error: philo_two: format: ./philo_two [nb_philosophers] ");
-		printf("[time_to_die] [time_to_eat] [time_to_sleep] ");
-		return (print_clear("([nb_time_each_philo_must_eat])\n", env));
-	}
+		return (print_clear(env, 0));
 	if (ac == 5 && (ft_atoi_pos(av[1]) < 0 || ft_atoi_pos(av[2]) < 0
 		|| ft_atoi_pos(av[3]) < 0 || ft_atoi_pos(av[4]) < 0))
-		return (print_clear("Error: philo_two: wrong argument\n", env));
+		return (print_clear(env, 1));
 	if (ac == 6 && (ft_atoi_pos(av[1]) < 0 || ft_atoi_pos(av[2]) < 0
 		|| ft_atoi_pos(av[3]) < 0 || ft_atoi_pos(av[4]) < 0
 		|| ft_atoi_pos(av[5]) < 0))
-		return (print_clear("Error: philo_two: wrong argument\n", env));
-	if (!(env = init_env(av)))
-		return (print_clear("Error: philo_two: fatal error\n", env));
-	if (init_threads(env) == ERROR)
-		return (print_clear("Error: philo_two: fatal error\n", env));
+		return (print_clear(env, 1));
+	if (!(env = init_env(av)) || init_threads(env, 0) == ERROR)
+		return (print_clear(env, 2));
 	sem_wait(env->end);
-	free_env(env);
+	while (i < env->nb_philo)
+		pthread_join(env->philos[i++].death, NULL);
+	i = 0;
+	while (i < env->nb_philo)
+		pthread_join(env->philos[i++].routine, NULL);
+	free_env(env, 0);
 	return (0);
 }
