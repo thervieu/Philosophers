@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 18:21:13 by user42            #+#    #+#             */
-/*   Updated: 2021/02/03 15:50:55 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/04 22:40:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/time.h>
 # include <semaphore.h>
 # include <signal.h>
+# include <sys/wait.h>
 
 # define SUCCESS 0
 # define ERROR 1
@@ -110,5 +111,7 @@ int				ft_strcpy(char *dst, const char *src);
 int				free_env(t_env *env);
 
 void			print_msg(t_philo *p, char *s);
+
+int				wait_for_end(t_env *env);
 
 #endif
