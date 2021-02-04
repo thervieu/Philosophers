@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:37:09 by user42            #+#    #+#             */
-/*   Updated: 2021/02/04 22:39:58 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/04 23:10:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void		routine(t_philo *phi)
 		if (*(p->env->someone_dead))
 			break ;
 	}
-	free_env(p->env);
+	free_env(p->env, -1);
 	exit(0);
 	return ;
 }

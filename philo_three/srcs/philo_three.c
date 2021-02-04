@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:24:43 by user42            #+#    #+#             */
-/*   Updated: 2021/02/04 22:39:38 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/04 23:16:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static int				print_clear(t_env *env, int i)
 	else if (i == 2)
 		printf("Error: philo_two: fatal error\n");
 	if (env)
-		free_env(env);
+		free_env(env, -1);
 	return (1);
 }
 
@@ -108,7 +108,8 @@ int						main(int ac, char **av)
 	if (!(env = init_env(av)) || init_processus(env) == ERROR)
 		return (print_clear(env, 2));
 	sem_wait(env->end);
-	wait_for_end(env);
-	free_env(env);
-	exit(0);
+	while (--(env->nb_philo) >= 0)
+		kill(env->philos[env->nb_philo].pid, SIGKILL);
+	free_env(env, -1);
+	return (0);
 }

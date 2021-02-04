@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:37:16 by user42            #+#    #+#             */
-/*   Updated: 2021/02/04 22:40:20 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/04 23:15:07 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,8 @@ int		ft_strcpy(char *dst, const char *src)
 	return (i);
 }
 
-int		free_env(t_env *env)
+int		free_env(t_env *env, int i)
 {
-	int		i;
 	char	semaphore[255];
 
 	sem_close(env->forks);
@@ -59,15 +58,12 @@ int		free_env(t_env *env)
 	sem_unlink(END_SEM);
 	sem_unlink(WRITE);
 	if (env->philos)
-	{
-		i = -1;
 		while (++i < env->nb_philo)
 		{
 			new_name(CHECK, (char*)semaphore, i);
 			sem_close(env->philos[i].check);
 			sem_unlink(semaphore);
 		}
-	}
 	i = 0;
 	while (i < env->nb_philo)
 		pthread_join(env->philos[i++].death, NULL);
@@ -90,34 +86,4 @@ void	print_msg(t_philo *p, char *s)
 	printf("%s\n", s);
 	sem_post(p->env->write_sem);
 	return ;
-}
-
-
-int		wait_for_end(t_env *env)
-{
-	int				status;
-	int				status_value;
-	int	i;
-
-	i = 0;
-	while (i < env->nb_philo)
-	{
-		waitpid(-1, &status, 0);
-		if ((WIFEXITED(status) || WIFSIGNALED(status)))
-		{
-			if ((status_value = WEXITSTATUS(status)) == 0)
-			{
-				while (i < env->nb_philo)
-				{
-					if (i != env->nb_philo)
-						kill(env->philos[i].pid, SIGTERM);
-					i++;
-				}
-				break ;
-			}
-			else if (status_value == 1)
-				i++;
-		}
-	}
-	return (0);
 }

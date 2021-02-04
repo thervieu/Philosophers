@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 18:21:13 by user42            #+#    #+#             */
-/*   Updated: 2021/02/04 22:40:38 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/04 23:13:42 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,8 @@ int				ft_atoi_pos(char *str);
 
 int				ft_strcpy(char *dst, const char *src);
 
-int				free_env(t_env *env);
+int				free_env(t_env *env, int i);
 
 void			print_msg(t_philo *p, char *s);
-
-int				wait_for_end(t_env *env);
 
 #endif
