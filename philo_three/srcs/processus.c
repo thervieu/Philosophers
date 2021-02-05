@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:37:09 by user42            #+#    #+#             */
-/*   Updated: 2021/02/04 23:10:26 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/05 01:10:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,12 @@ void		*check_death(void *phi)
 		if (get_time() > (p->time_last_eat + p->env->time_to_die))
 		{
 			p->dead = 1;
-			*(p->env->someone_dead) = 1;
 			print_msg(p, "died");
 			sem_wait(p->env->write_sem);
-			sem_post(p->check);
 			sem_post(p->env->end);
+			sem_post(p->check);
+			free_env(p->env, -1);
+			exit(1);
 			break ;
 		}
 		sem_post(p->check);
@@ -78,7 +79,7 @@ void		routine(t_philo *phi)
 			break ;
 	}
 	free_env(p->env, -1);
-	exit(0);
+	exit(1);
 	return ;
 }
 

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:24:43 by user42            #+#    #+#             */
-/*   Updated: 2021/02/04 23:16:30 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/05 01:43:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,7 @@ static int				print_clear(t_env *env, int i)
 int						main(int ac, char **av)
 {
 	t_env	*env;
-	int		i;
 
-	i = 0;
 	env = NULL;
 	if (ac < 5 || ac > 6)
 		return (print_clear(env, 0));
