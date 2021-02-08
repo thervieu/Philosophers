@@ -6,7 +6,7 @@
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/14 18:30:23 by user42            #+#    #+#              #
-#    Updated: 2021/02/08 15:24:15 by user42           ###   ########.fr        #
+#    Updated: 2021/02/08 15:28:22 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,10 +33,10 @@ FLAGS = -Wall -Wextra -Werror
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.c $(INCS) 
 	@mkdir -p $(OBJS_DIR)
 	@echo "Compiling"
-	@gcc $(FLAGS) -c $< -o $@
+	@clang $(FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
-	@gcc -lpthread $(FLAGS) -o $(NAME) $(OBJS)
+	@clang -lpthread $(FLAGS) -o $(NAME) $(OBJS)
 	@echo "Exec created !"
 
 all: $(NAME)
