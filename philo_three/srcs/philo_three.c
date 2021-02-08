@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:24:43 by user42            #+#    #+#             */
-/*   Updated: 2021/02/05 01:43:57 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 15:13:05 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,7 @@ int						main(int ac, char **av)
 		return (print_clear(env, 1));
 	if (!(env = init_env(av)) || init_processus(env) == ERROR)
 		return (print_clear(env, 2));
-	sem_wait(env->end);
-	while (--(env->nb_philo) >= 0)
-		kill(env->philos[env->nb_philo].pid, SIGKILL);
+	wait_for_end(env);
 	free_env(env, -1);
 	return (0);
 }

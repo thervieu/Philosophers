@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 09:37:09 by user42            #+#    #+#             */
-/*   Updated: 2021/02/05 01:10:49 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 15:23:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,9 @@ void		*check_death(void *phi)
 			p->dead = 1;
 			print_msg(p, "died");
 			sem_wait(p->env->write_sem);
-			sem_post(p->env->end);
 			sem_post(p->check);
 			free_env(p->env, -1);
-			exit(1);
-			break ;
+			exit(0);
 		}
 		sem_post(p->check);
 		ft_usleep(1000);
@@ -45,11 +43,6 @@ int			death(t_philo *p)
 	{
 		p->dead = 1;
 		*(p->env->someone_dead) = 1;
-		if (p->nb_eat == p->env->nb_must_eat && p->id + 1 == p->env->nb_philo)
-		{
-			sem_wait(p->env->write_sem);
-			sem_post(p->env->end);
-		}
 		return (1);
 	}
 	return (0);
@@ -99,4 +92,33 @@ int			init_processus(t_env *env)
 		usleep(70);
 	}
 	return (SUCCESS);
+}
+
+int			wait_for_end(t_env *env)
+{
+	int				status;
+	int				status_value;
+	int				i;
+
+	i = 0;
+	while (i < env->nb_philo)
+	{
+		waitpid(-1, &status, 0);
+		if ((WIFEXITED(status) || WIFSIGNALED(status)))
+		{
+			if ((status_value = WEXITSTATUS(status)) == 0)
+			{
+				while (i < env->nb_philo)
+				{
+					if (i != env->nb_philo)
+						kill(env->philos[i].pid, SIGTERM);
+					i++;
+				}
+				break ;
+			}
+			else if (status_value == 1)
+				i++;
+		}
+	}
+	return (0);
 }

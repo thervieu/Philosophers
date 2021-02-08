@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 18:21:13 by user42            #+#    #+#             */
-/*   Updated: 2021/02/05 01:09:41 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 15:24:34 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ void			eat(t_philo *philo);
 */
 
 int				init_processus(t_env *env);
+
+int				wait_for_end(t_env *env);
 
 /*
 ** time_and_sem.c
