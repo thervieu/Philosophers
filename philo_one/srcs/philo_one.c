@@ -81,14 +81,14 @@ static int				print_clear(t_env *env, int i)
 {
 	if (i == 0)
 	{
-		printf("Error: philo_two: format: ./philo_two [nb_philosophers] ");
+		printf("Error: philo_one: format: ./philo_one [nb_philosophers] ");
 		printf("[time_to_die] [time_to_eat] [time_to_sleep] ");
 		printf("([nb_time_each_philo_must_eat])\n");
 	}
 	else if (i == 1)
-		printf("Error: philo_two: wrong argument\n");
+		printf("Error: philo_one: wrong argument\n");
 	else if (i == 2)
-		printf("Error: philo_two: fatal error\n");
+		printf("Error: philo_one: fatal error\n");
 	if (env)
 		free_env(env);
 	return (1);
